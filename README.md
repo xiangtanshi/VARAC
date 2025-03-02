@@ -13,14 +13,9 @@ docker run --name my-mujoco --gpus all -v path-in-your-machine:path-in-container
 ```
 
 ## Usage
-we provide the code for runing PPO, TD3, and SAC in the `code` folder. And the command for running the these algorithms in the separate test.sh files. In particular, you can follow the sequencial order:
+we provide the code for runing PPO, TD3, and SAC in the `code` folder. And the command for running the these algorithms in the separate test.sh files. In particular, you can run the following command which will implement all the algorithms sequentially:
 ```bash
-cd code/ppo
-./test.sh
-cd ../td3
-./test.sh
-cd ../sac
-./test.sh
+bash run_all.sh
 ```
 
-The log files will be saved in the `record` folder, and the cumulative reward data will be stored in the `data_train` folder. After successfully running the above commands, you can use the reward arrays (collected across different random seeds) to reproduce the reward curves shown in Figure 1 of our paper. The detailed performance metrics for each algorithm are recorded in the `record` folder, which contains the data needed to calculate the reward and variance values presented in Table 1 of the paper.
+The log files will be saved in the `code/xx/record` folder, and the cumulative reward data will be stored in the `code/xx/data_train` folder, where `xx` is the name of the algorithm. After successfully running the above command, you can use the reward arrays (collected across different random seeds) in the `code/xx/data_train` folder to reproduce the reward curves shown in Figure 1 of our paper. The detailed performance results for each algorithm are recorded in the `code/xx/record` folder, which contains the data needed to calculate the average reward and variance values across different random seeds, presented in Table 1 of the paper.
