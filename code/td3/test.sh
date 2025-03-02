@@ -1,55 +1,70 @@
+#! /bin/bash
 
-# halfcheetah
-nohup python -u TD3_gpu.py --number 0 --seed 0 --env_id 2 --T 10 --F 2 > record/td3_out.log 2>&1 &
-nohup python -u TD3_gpu.py --number 0 --seed 1 --env_id 2 --T 10 --F 2 > record/td3_out1.log 2>&1 &
-nohup python -u TD3_gpu.py --number 0 --seed 2 --env_id 2 --T 10 --F 2 > record/td3_out2.log 2>&1 &
-nohup python -u TD3_gpu.py --number 0 --seed 3 --env_id 2 --T 10 --F 2 > record/td3_out3.log 2>&1 &
-nohup python -u TD3_gpu.py --number 0 --seed 4 --env_id 2 --T 10 --F 2 > record/td3_out4.log 2>&1 &
+# for log saving
+mkdir -p record
 
-# hopper
-nohup python -u TD3_gpu.py --number 0 --seed 0 --env_id 3 --T 10 --F 2 > record/td3_out_.log 2>&1 &
-nohup python -u TD3_gpu.py --number 0 --seed 1 --env_id 3 --T 10 --F 2 > record/td3_out1_.log 2>&1 &
-nohup python -u TD3_gpu.py --number 0 --seed 2 --env_id 3 --T 10 --F 2 > record/td3_out2_.log 2>&1 &
-nohup python -u TD3_gpu.py --number 0 --seed 3 --env_id 3 --T 10 --F 2 > record/td3_out3_.log 2>&1 &
-nohup python -u TD3_gpu.py --number 0 --seed 4 --env_id 3 --T 10 --F 2 > record/td3_out4_.log 2>&1 &
+# define the environment id and the environment name
+declare -A env_names
+env_names[0]="Pendulum"
+env_names[1]="BipedalWalkerHardcore"
+env_names[2]="HalfCheetah"
+env_names[3]="Hopper"
 
-# Pendulum
-nohup python -u TD3_gpu.py --number 0 --seed 0 --env_id 0 --T 3 --F 1 > record/td3_out__.log 2>&1 &
-nohup python -u TD3_gpu.py --number 0 --seed 1 --env_id 0 --T 3 --F 1 > record/td3_out1__.log 2>&1 &
-nohup python -u TD3_gpu.py --number 0 --seed 2 --env_id 0 --T 3 --F 1 > record/td3_out2__.log 2>&1 &
-nohup python -u TD3_gpu.py --number 0 --seed 3 --env_id 0 --T 3 --F 1 > record/td3_out3__.log 2>&1 &
-nohup python -u TD3_gpu.py --number 0 --seed 4 --env_id 0 --T 3 --F 1 > record/td3_out4__.log 2>&1 &
+# run 10 different random seeds
+for seed in {0..9}
+do
+    echo "Running with seed $seed"
+    
+    # HalfCheetah
+    echo "Starting ${env_names[2]} with seed $seed"
+    nohup python -u TD3_gpu.py --number 0 --seed $seed --env_id 2 --T 10 --F 2 > record/td3_halfcheetah_seed${seed}.log 2>&1 &
+    wait
+    
+    # Hopper
+    echo "Starting ${env_names[3]} with seed $seed"
+    nohup python -u TD3_gpu.py --number 0 --seed $seed --env_id 3 --T 10 --F 2 > record/td3_hopper_seed${seed}.log 2>&1 &
+    wait
+    
+    # Pendulum
+    echo "Starting ${env_names[0]} with seed $seed"
+    nohup python -u TD3_gpu.py --number 0 --seed $seed --env_id 0 --T 3 --F 1 > record/td3_pendulum_seed${seed}.log 2>&1 &
+    wait
+    
+    # BipedalWalkerHardcore
+    echo "Starting ${env_names[1]} with seed $seed"
+    nohup python -u TD3_gpu.py --number 0 --seed $seed --env_id 1 --T 10 --F 2 > record/td3_bipedalwalkerhardcore_seed${seed}.log 2>&1 &
+    wait
+done
 
-# BipedalWalkerHardcore
-nohup python -u TD3_gpu.py --number 0 --seed 0 --env_id 1 --T 10 --F 2 > record/td3_out___.log 2>&1 &
-nohup python -u TD3_gpu.py --number 0 --seed 1 --env_id 1 --T 10 --F 2 > record/td3_out1___.log 2>&1 &
-nohup python -u TD3_gpu.py --number 0 --seed 2 --env_id 1 --T 10 --F 2 > record/td3_out2___.log 2>&1 &
-nohup python -u TD3_gpu.py --number 0 --seed 3 --env_id 1 --T 10 --F 2 > record/td3_out3___.log 2>&1 &
-nohup python -u TD3_gpu.py --number 0 --seed 4 --env_id 1 --T 10 --F 2 > record/td3_out4___.log 2>&1 &
+echo "All TD3 experiments launched!"
 
 # -------------------------------
 # varac counterpart
 
-nohup python -u TD3_varac.py --number 2 --seed 0 --env_id 2 --T 10 --F 2 > record/varac_td3_out.log 2>&1 &
-nohup python -u TD3_varac.py --number 2 --seed 1 --env_id 2 --T 10 --F 2 > record/varac_td3_out1.log 2>&1 &
-nohup python -u TD3_varac.py --number 2 --seed 2 --env_id 2 --T 10 --F 2 > record/varac_td3_out2.log 2>&1 &
-nohup python -u TD3_varac.py --number 2 --seed 3 --env_id 2 --T 10 --F 2 > record/varac_td3_out3.log 2>&1 &
-nohup python -u TD3_varac.py --number 2 --seed 4 --env_id 2 --T 10 --F 2 > record/varac_td3_out4.log 2>&1 &
+# run 10 different random seeds for varac
+for seed in {0..9}
+do
+    echo "Running varac with seed $seed"
+    
+    # HalfCheetah
+    echo "Starting varac ${env_names[2]} with seed $seed"
+    nohup python -u TD3_varac.py --number 2 --seed $seed --env_id 2 --T 10 --F 2 > record/varac_td3_halfcheetah_seed${seed}.log 2>&1 &
+    wait
+    
+    # Hopper
+    echo "Starting varac ${env_names[3]} with seed $seed"
+    nohup python -u TD3_varac.py --number 2 --seed $seed --env_id 3 --T 10 --F 2 > record/varac_td3_hopper_seed${seed}.log 2>&1 &
+    wait
+    
+    # Pendulum
+    echo "Starting varac ${env_names[0]} with seed $seed"
+    nohup python -u TD3_varac.py --number 2 --seed $seed --env_id 0 --T 3 --F 1 > record/varac_td3_pendulum_seed${seed}.log 2>&1 &
+    wait
+    
+    # BipedalWalkerHardcore
+    echo "Starting varac ${env_names[1]} with seed $seed"
+    nohup python -u TD3_varac.py --number 2 --seed $seed --env_id 1 --T 10 --F 2 > record/varac_td3_bipedalwalkerhardcore_seed${seed}.log 2>&1 &
+    wait
+done
 
-nohup python -u TD3_varac.py --number 2 --seed 0 --env_id 3 --T 10 --F 2 > record/varac_td3_out_.log 2>&1 &
-nohup python -u TD3_varac.py --number 2 --seed 1 --env_id 3 --T 10 --F 2 > record/varac_td3_out1_.log 2>&1 &
-nohup python -u TD3_varac.py --number 2 --seed 2 --env_id 3 --T 10 --F 2 > record/varac_td3_out2_.log 2>&1 &
-nohup python -u TD3_varac.py --number 2 --seed 3 --env_id 3 --T 10 --F 2 > record/varac_td3_out3_.log 2>&1 &
-nohup python -u TD3_varac.py --number 2 --seed 4 --env_id 3 --T 10 --F 2 > record/varac_td3_out4_.log 2>&1 &
-
-nohup python -u TD3_varac.py --number 2 --seed 0 --env_id 0 --T 3 --F 1 > record/varac_td3_out__.log 2>&1 &
-nohup python -u TD3_varac.py --number 2 --seed 1 --env_id 0 --T 3 --F 1 > record/varac_td3_out1__.log 2>&1 &
-nohup python -u TD3_varac.py --number 2 --seed 2 --env_id 0 --T 3 --F 1 > record/varac_td3_out2__.log 2>&1 &
-nohup python -u TD3_varac.py --number 2 --seed 3 --env_id 0 --T 3 --F 1 > record/varac_td3_out3__.log 2>&1 &
-nohup python -u TD3_varac.py --number 2 --seed 4 --env_id 0 --T 3 --F 1 > record/varac_td3_out4__.log 2>&1 &
-
-nohup python -u TD3_varac.py --number 2 --seed 0 --env_id 1 --T 10 --F 2 > record/varac_td3_out___.log 2>&1 &
-nohup python -u TD3_varac.py --number 2 --seed 1 --env_id 1 --T 10 --F 2 > record/varac_td3_out1___.log 2>&1 &
-nohup python -u TD3_varac.py --number 2 --seed 2 --env_id 1 --T 10 --F 2 > record/varac_td3_out2___.log 2>&1 &
-nohup python -u TD3_varac.py --number 2 --seed 3 --env_id 1 --T 10 --F 2 > record/varac_td3_out3___.log 2>&1 &
-nohup python -u TD3_varac.py --number 2 --seed 4 --env_id 1 --T 10 --F 2 > record/varac_td3_out4___.log 2>&1 &
+echo "All varac-TD3 experiments launched!"

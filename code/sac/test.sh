@@ -1,54 +1,70 @@
-# halfcheetah
-nohup python -u SAC-continuous.py --number 0 --seed 0 --env_id 2 --T 10 --F 2 > record/sac_out.log 2>&1 &
-nohup python -u SAC-continuous.py --number 0 --seed 1 --env_id 2 --T 10 --F 2 > record/sac_out1.log 2>&1 &
-nohup python -u SAC-continuous.py --number 0 --seed 2 --env_id 2 --T 10 --F 2 > record/sac_out2.log 2>&1 &
-nohup python -u SAC-continuous.py --number 0 --seed 3 --env_id 2 --T 10 --F 2 > record/sac_out3.log 2>&1 &
-nohup python -u SAC-continuous.py --number 0 --seed 4 --env_id 2 --T 10 --F 2 > record/sac_out4.log 2>&1 &
+#! /bin/bash
 
-# hopper
-nohup python -u SAC-continuous.py --number 0 --seed 0 --env_id 3 --T 10 --F 2 > record/sac_out_.log 2>&1 &
-nohup python -u SAC-continuous.py --number 0 --seed 1 --env_id 3 --T 10 --F 2 > record/sac_out1_.log 2>&1 &
-nohup python -u SAC-continuous.py --number 0 --seed 2 --env_id 3 --T 10 --F 2 > record/sac_out2_.log 2>&1 &
-nohup python -u SAC-continuous.py --number 0 --seed 3 --env_id 3 --T 10 --F 2 > record/sac_out3_.log 2>&1 &
-nohup python -u SAC-continuous.py --number 0 --seed 4 --env_id 3 --T 10 --F 2 > record/sac_out4_.log 2>&1 &
+# for log saving
+mkdir -p record
 
-# Pendulum
-nohup python -u SAC-continuous.py --number 0 --seed 0 --env_id 0 --T 3 --F 1 > record/sac_out__.log 2>&1 &
-nohup python -u SAC-continuous.py --number 0 --seed 1 --env_id 0 --T 3 --F 1 > record/sac_out1__.log 2>&1 &
-nohup python -u SAC-continuous.py --number 0 --seed 2 --env_id 0 --T 3 --F 1 > record/sac_out2__.log 2>&1 &
-nohup python -u SAC-continuous.py --number 0 --seed 3 --env_id 0 --T 3 --F 1 > record/sac_out3__.log 2>&1 &
-nohup python -u SAC-continuous.py --number 0 --seed 4 --env_id 0 --T 3 --F 1 > record/sac_out4__.log 2>&1 &
+# define the environment id and the environment name
+declare -A env_names
+env_names[0]="Pendulum"
+env_names[1]="BipedalWalkerHardcore"
+env_names[2]="HalfCheetah"
+env_names[3]="Hopper"
 
-# BipedalWalkerHardcore
-nohup python -u SAC-continuous.py --number 0 --seed 0 --env_id 1 --T 10 --F 2 > record/sac_out___.log 2>&1 &
-nohup python -u SAC-continuous.py --number 0 --seed 1 --env_id 1 --T 10 --F 2 > record/sac_out1___.log 2>&1 &
-nohup python -u SAC-continuous.py --number 0 --seed 2 --env_id 1 --T 10 --F 2 > record/sac_out2___.log 2>&1 &
-nohup python -u SAC-continuous.py --number 0 --seed 3 --env_id 1 --T 10 --F 2 > record/sac_out3___.log 2>&1 &
-nohup python -u SAC-continuous.py --number 0 --seed 4 --env_id 1 --T 10 --F 2 > record/sac_out4___.log 2>&1 &
+# run 10 different random seeds
+for seed in {0..9}
+do
+    echo "Running with seed $seed"
+    
+    # HalfCheetah
+    echo "Starting ${env_names[2]} with seed $seed"
+    nohup python -u SAC-continuous.py --number 0 --seed $seed --env_id 2 --T 10 --F 2 > record/sac_halfcheetah_seed${seed}.log 2>&1 &
+    wait
+    
+    # Hopper
+    echo "Starting ${env_names[3]} with seed $seed"
+    nohup python -u SAC-continuous.py --number 0 --seed $seed --env_id 3 --T 10 --F 2 > record/sac_hopper_seed${seed}.log 2>&1 &
+    wait
+    
+    # Pendulum
+    echo "Starting ${env_names[0]} with seed $seed"
+    nohup python -u SAC-continuous.py --number 0 --seed $seed --env_id 0 --T 3 --F 1 > record/sac_pendulum_seed${seed}.log 2>&1 &
+    wait
+    
+    # BipedalWalkerHardcore
+    echo "Starting ${env_names[1]} with seed $seed"
+    nohup python -u SAC-continuous.py --number 0 --seed $seed --env_id 1 --T 10 --F 2 > record/sac_bipedalwalkerhardcore_seed${seed}.log 2>&1 &
+    wait
+done
+
+echo "All SAC experiments launched!"
 
 # -------------------------------
 # varac counterpart
 
-nohup python -u SAC-varac.py --number 2 --seed 0 --env_id 2 --T 10 --F 2 > record/varac_sac_out.log 2>&1 &
-nohup python -u SAC-varac.py --number 2 --seed 1 --env_id 2 --T 10 --F 2 > record/varac_sac_out1.log 2>&1 &
-nohup python -u SAC-varac.py --number 2 --seed 2 --env_id 2 --T 10 --F 2 > record/varac_sac_out2.log 2>&1 &
-nohup python -u SAC-varac.py --number 2 --seed 3 --env_id 2 --T 10 --F 2 > record/varac_sac_out3.log 2>&1 &
-nohup python -u SAC-varac.py --number 2 --seed 4 --env_id 2 --T 10 --F 2 > record/varac_sac_out4.log 2>&1 &
+# run 10 different random seeds for varac
+for seed in {0..9}
+do
+    echo "Running varac with seed $seed"
+    
+    # HalfCheetah
+    echo "Starting varac ${env_names[2]} with seed $seed"
+    nohup python -u SAC-varac.py --number 2 --seed $seed --env_id 2 --T 10 --F 2 > record/varac_sac_halfcheetah_seed${seed}.log 2>&1 &
+    wait
+    
+    # Hopper
+    echo "Starting varac ${env_names[3]} with seed $seed"
+    nohup python -u SAC-varac.py --number 2 --seed $seed --env_id 3 --T 10 --F 2 > record/varac_sac_hopper_seed${seed}.log 2>&1 &
+    wait
+    
+    # Pendulum
+    echo "Starting varac ${env_names[0]} with seed $seed"
+    nohup python -u SAC-varac.py --number 2 --seed $seed --env_id 0 --T 3 --F 1 > record/varac_sac_pendulum_seed${seed}.log 2>&1 &
+    wait
+    
+    # BipedalWalkerHardcore
+    echo "Starting varac ${env_names[1]} with seed $seed"
+    nohup python -u SAC-varac.py --number 2 --seed $seed --env_id 1 --T 10 --F 2 > record/varac_sac_bipedalwalkerhardcore_seed${seed}.log 2>&1 &
+    wait
+done
 
-nohup python -u SAC-varac.py --number 2 --seed 0 --env_id 3 --T 10 --F 2 > record/varac_sac_out_.log 2>&1 &
-nohup python -u SAC-varac.py --number 2 --seed 1 --env_id 3 --T 10 --F 2 > record/varac_sac_out1_.log 2>&1 &
-nohup python -u SAC-varac.py --number 2 --seed 2 --env_id 3 --T 10 --F 2 > record/varac_sac_out2_.log 2>&1 &
-nohup python -u SAC-varac.py --number 2 --seed 3 --env_id 3 --T 10 --F 2 > record/varac_sac_out3_.log 2>&1 &
-nohup python -u SAC-varac.py --number 2 --seed 4 --env_id 3 --T 10 --F 2 > record/varac_sac_out4_.log 2>&1 &
-
-nohup python -u SAC-varac.py --number 2 --seed 0 --env_id 0 --T 3 --F 1 > record/varac_sac_out__.log 2>&1 &
-nohup python -u SAC-varac.py --number 2 --seed 1 --env_id 0 --T 3 --F 1 > record/varac_sac_out1__.log 2>&1 &
-nohup python -u SAC-varac.py --number 2 --seed 2 --env_id 0 --T 3 --F 1 > record/varac_sac_out2__.log 2>&1 &
-nohup python -u SAC-varac.py --number 2 --seed 3 --env_id 0 --T 3 --F 1 > record/varac_sac_out3__.log 2>&1 &
-nohup python -u SAC-varac.py --number 2 --seed 4 --env_id 0 --T 3 --F 1 > record/varac_sac_out4__.log 2>&1 &
-
-nohup python -u SAC-varac.py --number 2 --seed 0 --env_id 1 --T 10 --F 2 > record/varac_sac_out___.log 2>&1 &
-nohup python -u SAC-varac.py --number 2 --seed 1 --env_id 1 --T 10 --F 2 > record/varac_sac_out1___.log 2>&1 &
-nohup python -u SAC-varac.py --number 2 --seed 2 --env_id 1 --T 10 --F 2 > record/varac_sac_out2___.log 2>&1 &
-nohup python -u SAC-varac.py --number 2 --seed 3 --env_id 1 --T 10 --F 2 > record/varac_sac_out3___.log 2>&1 &
-nohup python -u SAC-varac.py --number 2 --seed 4 --env_id 1 --T 10 --F 2 > record/varac_sac_out4___.log 2>&1 &
+echo "All varac-SAC experiments launched!"
